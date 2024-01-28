@@ -1,0 +1,106 @@
+# change these aliases if it's conflicting with another job plugin.
+aliases:
+  - job
+  - sjob
+
+# listing settings
+listing:
+  broadcast:
+    enable: true
+    message:
+      - '&8[&b&lJob&8] &a%player% &7has listed a new item! &b&l/jobs'
+  limits:
+    permissions: # supremejobs.limit.<group>; example: 'supremejobs.limit.default'
+      default: 2
+      vip: 5
+      #mvp: 10
+  min-price: 100
+  max-price: 100000
+  creative-mode: false # set true if you want to list jobs in creative mode.
+  disabled_materials:
+    - 'BEDROCK'
+    - 'BARRIER'
+    - 'COMMAND_BLOCK'
+    - 'STRUCTURE_BLOCK'
+    - 'END_PORTAL_FRAME'
+
+# npc area
+npc-jobs:
+  lumberjob:
+    enable: false
+    npc: lumberjack
+    interactions:
+      required:
+        item: LOG
+        amount: 10
+      # price commands are executed through console.
+      price:
+        - 'eco give %player% 100'
+      cooldown: 86400 # in seconds (86400 seconds = 24 hours)
+      stages:
+        1:
+          npc-need-talk: '&e[NPC] &fI''m in the need off 10 wood, Would you be willing to grab them for me for a nice price?'
+          npc-cooldown: '&e[NPC] &cPlease come back tomorrow and i''ll more work for you!'
+        2:
+          accepted: '&e[NPC] &fYou''re such a nice person, i''ll be seeing you shortly with that wood, ay.'
+          declined: '&e[NPC] &fHave a nice day sir! Hopefully you want work at a later date.'
+
+# make sure you can check your panel database info to make sure everything is correct.
+# Note: There are no extra steps needed for SQLite.
+data:
+  # types: [SQLite / MARIADB]
+  type: 'SQLite'
+
+  # The address for the database server.
+  # - to enable this part, change type to 'MARIADB'
+  # - some hosts can use your domain or server ip.
+  address: 'host'
+  # The standard DB engine port is used by default
+  port: 3306
+  # The name of the database to store tag data in.
+  database: 'database'
+  # Credentials for the database.
+  username: 'user'
+  password: 'pass'
+  # leave this, if you don't know how to use options.
+  options: 'useSSL=false&autoReconnect=true'
+
+menus:
+  main-menu:
+    title: '         ★ Jobs ★'
+    slots: 27
+    fill-empty:
+      enable: true
+      material: 'GRAY_STAINED_GLASS_PANE'
+    items:
+      browse-jobs:
+        material: BOOK
+        displayname: '&b&lBrowse Jobs'
+        slot: 13
+        lore:
+          - '&7Click to browse all listed'
+          - '&7player jobs & get paid for completing!'
+        glow: false
+  jobs-menu:
+    title: '         ★ Jobs ★'
+    slots: 54
+    fill-empty:
+      enable: false
+      material: 'GRAY_STAINED_GLASS_PANE'
+    items:
+      job:
+        displayname: '&a&l%listed_owner%'
+        unlocked:
+          material: %listed_item_required%
+          lore:
+            - '&7Price: &b%listed_price%'
+            - '&7Item: &b%listed_item_required%'
+            - ''
+            - '&e&lYou can complete this job!'
+        locked:
+          material:
+          lore:
+            - '&7Price: &b%listed_price%'
+            - '&7Item: &b%listed_item_required%'
+            - ''
+            - '&c&lRequired material content missing!'
